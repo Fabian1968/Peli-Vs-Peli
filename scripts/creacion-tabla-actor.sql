@@ -1,0 +1,5 @@
+CREATE TABLE `actor` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(70) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2089 DEFAULT CHARSET=latin1
