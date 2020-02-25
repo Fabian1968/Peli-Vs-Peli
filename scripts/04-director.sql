@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `director`;
+
 CREATE TABLE `director` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) NOT NULL DEFAULT '',

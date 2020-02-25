@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Para cargar Generos en el select del front.
+
 function cargarGeneros(req, res) {
     var sql = "SELECT * FROM genero";
     con.query(sql, (error, resultado, campos) => {

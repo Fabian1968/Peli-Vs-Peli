@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Permite volver a iniciar una competencia, desestimando los votos recibidos anteriormente.
+
 function reiniciarCompetencia(req, res) {
     var idCompetencia = req.params.idCompetencia;
 

@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Permite cambiar nombre de una competencia activa.
+
 function editarNombre(req, res) {
 
     var idCompetencia = req.params.idCompetencia;

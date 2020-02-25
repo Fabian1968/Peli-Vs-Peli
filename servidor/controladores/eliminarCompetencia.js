@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Permite el borrado lógico de una competencia activa.
+
 function eliminarCompetencia(req, res) {
 
     var idCompetencia = req.params.idCompetencia;

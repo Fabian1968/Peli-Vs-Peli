@@ -1,18 +1,32 @@
 var con = require('../lib/conexionbd');
 
+// Inicializamos la variable global.
 var cantidadPeliculasACompetir;
-var cantidadNombreRepetido;
-var directorCompetenciaNombre;
-var directorCompetenciaId;
 
 function crearNuevaCompetencia(req, res) {
 
+    //Se guardan en variables los parámetros recibidos desde el body del front.
     var nombreCompetencia = req.body.nombre;
     var actorCompetencia = req.body.actor;
     var generoCompetencia = req.body.genero;
     var directorCompetencia = req.body.director;
 
-    var sqlContarPeliculasACompetir = "SELECT COUNT(*) as cantidad FROM pelicula JOIN director ON pelicula.director = director.nombre JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id WHERE 1=1";
+    var sqlContarPeliculasACompetir = "SELECT COUNT(*) as cantidad FROM pelicula ";
+
+    if (actorCompetencia > 0) {
+
+        sqlContarPeliculasACompetir += " JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id ";
+
+    }
+
+    if (directorCompetencia > 0) {
+
+        sqlContarPeliculasACompetir += " JOIN director ON pelicula.director = director.nombre ";
+
+    }
+
+    sqlContarPeliculasACompetir += " WHERE 1=1 ";
+
 
     if (actorCompetencia == 0) {
 
@@ -47,21 +61,31 @@ function crearNuevaCompetencia(req, res) {
     }
 
     con.query(sqlContarPeliculasACompetir, (error, resultadoCantidadPeliculasACompetir, campos) => {
+
         cantidadPeliculasACompetir = resultadoCantidadPeliculasACompetir[0].cantidad;
+
         if (error) {
 
-            console.log("Existe un error", error.message);
-            return res.status(422).send("Existe un error en la consulta a la BD");
+            console.log("Error al contar películas a competir", error.message);
+            return res.status(422).send("Error al contar películas a competir");
 
+            //Restricción adicional que impide nombre vacío.
+        } else if ((nombreCompetencia.length == 0)) {
+
+            console.log("Falta el nombre de la competencia");
+            return res.status(422).send("Vuelve a intentarlo: Falta el nombre de la competencia.");
+
+            //Restricción que impide nombre con menos de 5 caracteres.
         } else if ((nombreCompetencia.length < 5)) {
 
-            console.log("Sin nombre o nombre corto");
-            return res.status(422).send("Vuelve a intentarlo: Sin nombre o nombre corto");
+            console.log("Nombre con menos de 5 caracteres");
+            return res.status(422).send("Vuelve a intentarlo: El nombre debe tener como mínimo 5 caracteres.");
 
+            //Verifica que existan al menos 2 películas para competir.
         } else if (cantidadPeliculasACompetir < 2) {
 
             console.log("Menos de 2 peliculas para competir");
-            return res.status(422).send("Vuelve a intentarlo: Los filtros aplicados arrojan menos de 2 Películas para competir");
+            return res.status(422).send("Vuelve a intentarlo: Los filtros aplicados arrojan menos de 2 Películas para competir.");
 
         } else {
 
@@ -71,10 +95,11 @@ function crearNuevaCompetencia(req, res) {
 
             con.query(sqlInsertarCompetencia, (error, resultadoInsertarCompetencia, campos) => {
 
+                //Clave Unique para el campo nombre de la BD impide nombres repetidos.
                 if (error) {
 
-                    console.log("Existe un error al insertar la competencia en la BD", error.message);
-                    return res.status(422).send("Existe un error al insertar la competencia en la BD");
+                    console.log("Ya existe nombre de competencia que se intenta ingresar", error.message);
+                    return res.status(422).send("Vuelve a intentarlo: Ya existe el nombre de competencia " + nombreCompetencia);
                 }
 
                 res.send(JSON.stringify(resultadoInsertarCompetencia));
@@ -87,129 +112,3 @@ function crearNuevaCompetencia(req, res) {
 module.exports = {
     crearNuevaCompetencia: crearNuevaCompetencia,
 }
-
-/*
-function crearNuevaCompetencia(req, res) {
-
-    var sqlContarPeliculasACompetir = "SELECT COUNT(*) as cantidad FROM pelicula WHERE 1=1";
-
-    var nombreCompetencia = req.body.nombre;
-    var actorCompetencia = req.body.actor;
-    var generoCompetencia = req.body.genero;
-    var directorCompetencia = req.body.director;
-
-    if (nombreCompetencia.length > 0) {
-
-        nombreCompetencia = null;
-
-    } else {
-
-        nombreCompetencia = '"' + req.body.nombre + '"';
-
-        var sqlVerificarNombreRepetido = "SELECT *, count(*) as cantidad from competencias where nombre = " + nombreCompetencia + "";
-
-        con.query(sqlVerificarNombreRepetido, (error, resultadoNombreRepetido, campos) => {
-
-            cantidadNombreRepetido = resultadoNombreRepetido[0].cantidad;
-            console.log("cantidad nombres repetidos: " + cantidadNombreRepetido);
-            console.log("nombre de la competencia: " + nombreCompetencia);
-            //return;
-
-
-        })
-    }
-
-
-    // var sqlContarPeliculasACompetir = "SELECT COUNT(*) as cantidad FROM pelicula WHERE 1=1";
-
-
-    if (actorCompetencia == 0) {
-
-        actorCompetencia = null;
-
-    } else {
-
-        sqlContarPeliculasACompetir = 'SELECT COUNT(*) as cantidad FROM pelicula JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id WHERE actor_pelicula.actor_id = "' + actorCompetencia + '"';
-
-    }
-
-    if (generoCompetencia == 0) {
-        generoCompetencia = null;
-
-    } else {
-
-        sqlContarPeliculasACompetir += ' AND genero_id = "' + generoCompetencia + '"';
-
-    }
-
-    if (directorCompetencia == 0) {
-        directorCompetencia = null;
-
-    } else {
-
-        var sqlNombreDirector = 'SELECT * FROM director WHERE director.id = ' + directorCompetencia + '';
-
-        con.query(sqlNombreDirector, (error, resultadosDirector, campos) => {
-
-            if (error) {
-                console.log("Existe un error", error.message);
-                return res.status(404).send("Existe un error en la consulta");
-            } else {
-
-                directorCompetenciaNombre = resultadosDirector[0].nombre;
-                directorCompetenciaId = resultadosDirector[0].id;
-                console.log("nombre dir " + directorCompetenciaNombre);
-                console.log("id dir " + directorCompetenciaId);
-
-                return;
-            }
-
-
-        })
-
-        sqlContarPeliculasACompetir += ' AND director = "' + directorCompetenciaNombre + '"';
-    }
-
-    console.log("sqlContarPeliculasACompetir: " + sqlContarPeliculasACompetir);
-
-    con.query(sqlContarPeliculasACompetir, (error, resultadoCantidadPeliculasACompetir, campos) => {
-
-        if (error) {
-
-            console.log("Existe un error", error.message);
-            return res.status(404).send("Existe un error en la consulta");
-
-        }
-
-        return cantidad = resultadoCantidadPeliculasACompetir[0].cantidad;
-
-
-    })
-
-    if (cantidad > 2 && cantidadNombreRepetido < 1) {
-        console.log("cantidad de pelis a competir" + cantidad)
-
-        var sqlInsertarCompetencia = "INSERT INTO competencias SET nombre=  " + nombreCompetencia + " , genero_id = " + generoCompetencia + ", director_id = " + directorCompetencia + ", actor_id = " + actorCompetencia + "";
-
-    }
-
-    con.query(sqlInsertarCompetencia, (error, resultado, campos) => {
-
-
-
-        if (error) {
-
-            console.log("Verifica la competencia a crear", error.message)
-            return res.status(422).send("Vuelve a intentarlo: Te falta NOMBRE o ya existe la competencia con el NOMBRE ingresado.");
-
-        } else if (cantidad < 2) {
-
-            console.log("Imposible crear competencia, menos de 2 películas para competir.");
-            return res.status(422).send("Vuelve a intentarlo: Los filtros que aplicaste arrojan menos de 2 peliculas para competir.");
-
-        }
-
-        res.send(JSON.stringify(resultado));
-    })
-}
-*/

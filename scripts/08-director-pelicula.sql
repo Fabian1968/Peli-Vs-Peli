@@ -1,9 +1,10 @@
+DROP TABLE IF EXISTS `director_pelicula`;
+
 CREATE TABLE `director_pelicula` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `director_id` int(11) unsigned NOT NULL,
   `pelicula_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `director_id_2` (`director_id`,`pelicula_id`),
   KEY `director_id` (`director_id`),
   KEY `pelicula_director_id` (`pelicula_id`),
   CONSTRAINT `director_id` FOREIGN KEY (`director_id`) REFERENCES `director` (`id`),

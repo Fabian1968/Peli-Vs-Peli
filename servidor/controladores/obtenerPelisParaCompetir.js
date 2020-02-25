@@ -1,18 +1,18 @@
 var con = require('../lib/conexionbd');
 
+// Se inicializan variables globales.
 var genero_id;
 var actor_id;
 var director_id;
-var director_nombre;
 var nombre;
-var id;
+
 
 
 function obtenerPelisParaCompetir(req, res) {
 
 
     var id = req.params.id; // id de la competencia que se recibe x parámetro.
-    var activa = "Y"; // ref al campo de la tabla que indica que la competencia está activa.
+    var activa = "Y"; // Ref. al campo de la tabla que indica que la competencia está activa.
 
     var sqlCompetencia = "SELECT * FROM competencias WHERE id = " + id + " AND activa = '" + activa + "'";
 
@@ -22,7 +22,7 @@ function obtenerPelisParaCompetir(req, res) {
             console.log("Existe un error", error.message);
             return res.status(404).send("La competencia no existe o no está Activa");
         }
-
+        //Se guardan en variables los resultados de la competencia obtenidos de la consulta a la BD.
         genero_id = resultadoCompetencia[0].genero_id;
         director_id = resultadoCompetencia[0].director_id;
         actor_id = resultadoCompetencia[0].actor_id;

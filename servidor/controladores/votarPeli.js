@@ -2,6 +2,7 @@ var con = require('../lib/conexionbd');
 
 function votarPeli(req, res) {
 
+    //Se guardar en variables los datos recibimos por parametro y en el body desde el front.
     var idCompetencia = req.params.idCompetencia;
     var idPelicula = req.body.idPelicula;
 

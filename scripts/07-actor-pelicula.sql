@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `actor_pelicula`;
+
 CREATE TABLE `actor_pelicula` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `actor_id` int(11) unsigned NOT NULL,

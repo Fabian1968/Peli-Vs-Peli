@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `genero`;
+
 CREATE TABLE `genero` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(30) NOT NULL DEFAULT '',

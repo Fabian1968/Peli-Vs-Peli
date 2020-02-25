@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Para cargar Directores en el select del front.
+
 function cargarDirectores(req, res) {
     var sql = "SELECT * FROM director";
     con.query(sql, (error, resultado, campos) => {

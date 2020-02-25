@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `pelicula`;
+
 CREATE TABLE `pelicula` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `titulo` varchar(300) DEFAULT '',

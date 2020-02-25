@@ -1,6 +1,7 @@
 var con = require('../lib/conexionbd');
 
-//Trae de la BD todas las competencias activas (tabla competencias, campo activa="Y")
+//Trae de la BD todas las competencias activas (tabla competencias, campo activa="Y").
+
 function buscarCompetenciasActivasBD(req, res) {
 
     var sql = "SELECT * FROM competencias where activa = 'Y'";

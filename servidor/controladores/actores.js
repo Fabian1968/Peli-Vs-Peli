@@ -1,5 +1,7 @@
 var con = require('../lib/conexionbd');
 
+// Para cargar Actores en el select del front.
+
 function cargarActores(req, res) {
     var sql = "SELECT * FROM actor";
     con.query(sql, (error, resultado, campos) => {

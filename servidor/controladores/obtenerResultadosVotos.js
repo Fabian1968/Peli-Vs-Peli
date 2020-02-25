@@ -2,6 +2,7 @@ var con = require('../lib/conexionbd');
 
 function obtenerResultadosVotos(req, res) {
 
+    //Se guarda en variable el parametro recibido desde el front.
     var idCompetencia = req.params.id;
 
     var sqlCompetencia = "SELECT nombre FROM competencias WHERE id = " + idCompetencia + "";

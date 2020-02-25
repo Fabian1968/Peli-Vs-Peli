@@ -15,6 +15,7 @@ var crearNuevaCompetencia = require('./controladores/crearNuevaCompetencia');
 var eliminarCompetencia = require('./controladores/eliminarCompetencia');
 var reiniciarCompetencia = require('./controladores/reiniciarCompetencia');
 var editarNombreCompetencia = require('./controladores/editarNombreCompetencia');
+var obtenerCompetencia = require('./controladores/obtenercompetencia');
 
 
 var app = express();
@@ -30,6 +31,8 @@ app.use(bodyParser.json());
 
 
 app.get('/competencias', buscarCompetenciasActivasBD.buscarCompetenciasActivasBD);
+
+app.get('/competencias/:id', obtenerCompetencia.obtenerCompetencia);
 
 app.post('/competencias', crearNuevaCompetencia.crearNuevaCompetencia);
 
@@ -52,7 +55,7 @@ app.delete('/competencias/:idCompetencia', eliminarCompetencia.eliminarCompetenc
 app.put('/competencias/:idCompetencia', editarNombreCompetencia.editarNombre);
 
 
-//seteamos el puerto en el cual va a escuchar los pedidos la aplicación
+//Seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = '8080';
 
 app.listen(puerto, function() {

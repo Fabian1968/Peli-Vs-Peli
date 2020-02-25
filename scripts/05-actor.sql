@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS `competencias`;
+DROP TABLE IF EXISTS `actor`;
 
-CREATE TABLE `competencias` (
+CREATE TABLE `actor` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2089 DEFAULT CHARSET=latin1
